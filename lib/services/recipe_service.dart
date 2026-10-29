@@ -6,14 +6,18 @@ class RecipeService {
   static const String _baseUrl = 'https://dummyjson.com/recipes';
 
   Future<List<Receta>> obtenerRecetas() async {
-    final response = await http.get(Uri.parse(_baseUrl));
+    final Uri url = Uri.parse(_baseUrl);
+    final http.Response respuesta = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final List<dynamic> lista = data['recipes'];
-      return lista.map((json) => Receta.fromJson(json)).toList();
+    if (respuesta.statusCode == 200) {
+      final Map<String, dynamic> datos = jsonDecode(respuesta.body);
+      final List<dynamic> ListaRecetas = datos['recipes'];
+      print(ListaRecetas);
+      return ListaRecetas
+      .map((RecetaJson) => Receta.fromJson(RecetaJson))
+      .toList(); 
     } else {
-      throw Exception('Error al cargar recetas: ${response.statusCode}');
+      throw Exception('Error al cargar recetas: ${respuesta.statusCode}');
     }
   }
 }
