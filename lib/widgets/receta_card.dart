@@ -4,21 +4,14 @@ import 'package:recetasapp/models/receta.dart';
 class RecetaCard extends StatelessWidget {
   final Receta receta;
   final VoidCallback? onTap;
-
-  const RecetaCard({
-    super.key,
-    required this.receta,
-    this.onTap,
-  });
+  const RecetaCard({super.key, required this.receta, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
@@ -57,7 +50,7 @@ class RecetaCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${receta.tiempoTotal} min',
+                      '${receta.cocina} · ${receta.dificultad} · ${receta.tiempoTotal} min',
                       style: TextStyle(
                         fontSize: 11.5,
                         color: Colors.grey.shade600,

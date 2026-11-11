@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:recetasapp/models/receta.dart';
 
@@ -12,9 +13,10 @@ class RecipeService {
     if (respuesta.statusCode == 200) {
       final Map<String, dynamic> datos = jsonDecode(respuesta.body);
       final List<dynamic> listaRecetas = datos['recipes'];
+      print(listaRecetas);
       return listaRecetas
-      .map((recetaJson) => Receta.fromJson(recetaJson))
-      .toList(); 
+          .map((recetaJson) => Receta.fromJson(recetaJson))
+          .toList();
     } else {
       throw Exception('Error al cargar recetas: ${respuesta.statusCode}');
     }

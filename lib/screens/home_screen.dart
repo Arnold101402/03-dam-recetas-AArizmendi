@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recetasapp/models/receta.dart';
+import 'package:recetasapp/screens/detalle_receta_screen.dart';
 import 'package:recetasapp/services/recipe_service.dart';
 import 'package:recetasapp/widgets/receta_card.dart';
 
@@ -11,12 +12,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Receta>> _recetas;
+  final RecipeService _recipeService = RecipeService();
+  late Future<List<Receta>> _futureRecetas;
 
   @override
   void initState() {
     super.initState();
-    _recetas = RecipeService().obtenerRecetas();
+    _futureRecetas = _recipeService.obtenerRecetas();
   }
 
   @override
@@ -31,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color.fromARGB(255, 113, 27, 118),
       ),
       body: FutureBuilder<List<Receta>>(
-        future: _recetas,
+        future: _futureRecetas,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -41,9 +43,23 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           final recetas = snapshot.data!;
           return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 8),
             itemCount: recetas.length,
-            itemBuilder: (context, i) =>
-                RecetaCard(receta: recetas[i], onTap: () {}),
+            itemBuilder: (context, index) {
+              return RecetaCard(
+                receta: recetas[index],
+                onTap: () async {
+                  // PARTE AGREGADA INICIA AQUÍ
+                  final bool? esFavorita = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DetalleRecetaScreen(receta: recetas[index]),
+                    ), // MaterialPageRoute
+                  );
+                }, // PARTE AGREGADA TERMINA AQUÍ
+              ); // RecetaCard
+            },
           );
         },
       ),
